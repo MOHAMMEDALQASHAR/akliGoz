@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrol Paneli - Yüz Tanıma Sistemi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <span class="logo-icon">👤</span>
+                <span>Yüz Tanıma Sistemi</span>
+            </div>
+            <div class="navbar-user">
+                <span>Merhaba, {{ user_name }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm">Çıkış Yap</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="section-header">
+                <h2>Yüz Yönetimi</h2>
+            </div>
+
+            <!-- Camera Section -->
+            <div class="camera-section">
+                <div class="camera-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+
+                    <div class="camera-overlay">
+                        <div id="recognitionResult" class="recognition-result"></div>
+                    </div>
+                </div>
+
+                <div class="camera-controls">
+
+                    <div class="button-group">
+                        <button id="startCamera" class="btn btn-primary">
+                            📷 Kamerayı Aç
+                        </button>
+                        <button id="stopCamera" class="btn btn-secondary" style="display: none;">
+                            ⏹️ Kamerayı Kapat
+                        </button>
+                        <button id="recognizeBtn" class="btn btn-success" style="display: none;">
+                            🔍 Yüzü Tanı
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add Face Section -->
+                <div class="add-face-section">
+                    <h3>Yeni Yüz Ekle</h3>
+                    <form id="addFaceForm" class="add-face-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="faceName">Kişi Adı</label>
+                                <input type="text" id="faceName" required placeholder="Ahmet Yılmaz">
+                            </div>
+                            <button type="button" id="captureBtn" class="btn btn-primary" disabled>
+                                📸 Fotoğraf Çek
+                            </button>
+                        </div>
+
+                        <div id="capturedImagePreview" class="captured-preview" style="display: none;">
+                            <img id="previewImg" alt="Preview">
+                            <button type="submit" class="btn btn-success">
+                                ✅ Yüzü Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Saved Faces List -->
+                <div class="faces-list-section">
+                    <h3>Kaydedilen Yüzler ({{ faces|length }})</h3>
+
+                    <div class="faces-grid" id="facesGrid">
+                        {% if faces %}
+                        {% for face in faces %}
+                        <div class="face-card" data-face-id="{{ face.id }}">
+                            <div class="face-image">
+                                <!-- Fix image path to point to static uploads -->
+                                {% set filename = face.image_path.replace('\\', '/').split('/')[-1] %}
+                                <img src="{{ url_for('static', filename='uploads/faces/' + filename) }}"
+                                    alt="{{ face.name }}"
+                                    onerror="this.src='{{ url_for('static', filename='images/no-image.png') }}'">
+                            </div>
+                            <div class="face-info">
+                                <h4>{{ face.name }}</h4>
+                                <small>{{ face.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                            </div>
+                            <div class="face-actions"
+                                style="display: flex; gap: 5px; justify-content: center; margin-top: 10px;">
+                                <button class="btn btn-primary btn-sm edit-face" data-face-id="{{ face.id }}"
+                                    data-face-name="{{ face.name }}" onclick="handleEditClick(this)">
+                                    ✏️ Düzenle
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-face" data-face-id="{{ face.id }}"
+                                    onclick="handleDeleteClick(this)">
+                                    🗑️ Sil
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="empty-state">
+                            <p>Henüz kaydedilmiş yüz yok</p>
+                            <p>Yeni yüz eklemek için kamerayı kullanın</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Modal for Edit -->
+        <div id="editModal" class="custom-modal">
+            <div class="modal-content">
+                <h3>İsmi Düzenle</h3>
+                <input type="text" id="editNameInput" placeholder="Yeni isim" autofocus>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="confirmEdit()">✓ Onayla</button>
+                    <button class="btn btn-secondary" onclick="cancelEdit()">✕ İptal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Modal for Delete -->
+        <div id="deleteModal" class="custom-modal">
+            <div class="modal-content">
+                <h3>⚠️ Emin misiniz?</h3>
+                <p>Bu yüzü silmek istediğinize emin misiniz?</p>
+                <div class="modal-buttons">
+                    <button class="btn btn-danger" onclick="confirmDelete()">✓ Onayla</button>
+                    <button class="btn btn-secondary" onclick="cancelDelete()">✕ İptal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast" class="toast"></div>
+
+        <script src="{{ url_for('static', filename='js/dashboard.js') }}?v=20251213v6"></script>
+</body>
+
+</html>

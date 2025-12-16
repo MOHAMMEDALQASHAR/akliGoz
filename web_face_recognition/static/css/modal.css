@@ -1,0 +1,116 @@
+/* Custom Modal Styles - صناديق صغيرة ومباشرة */
+.custom-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-modal.show {
+    display: flex !important;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    min-width: 320px;
+    max-width: 400px;
+    animation: modalSlideIn 0.2s ease;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin: 0 0 15px 0;
+    color: #1e293b;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.modal-content p {
+    margin: 0 0 20px 0;
+    color: #64748b;
+    font-size: 1rem;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-buttons .btn {
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    min-width: 100px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 8px;
+}
+
+.modal-buttons .btn-primary {
+    background: #10b981;
+    color: white;
+}
+
+.modal-buttons .btn-primary:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+.modal-buttons .btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.modal-buttons .btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+.modal-buttons .btn-secondary {
+    background: #6b7280;
+    color: white;
+}
+
+.modal-buttons .btn-secondary:hover {
+    background: #4b5563;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}

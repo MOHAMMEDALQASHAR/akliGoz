@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Project specific
+datasets/
+Turkish Lira/
+my_currency_data/
+runs/
+audio_cache/
+known_faces/
+
+# Media and Models
+*.mp3
+*.pt
+*.wav

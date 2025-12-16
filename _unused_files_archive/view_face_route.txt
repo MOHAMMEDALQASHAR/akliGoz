@@ -1,0 +1,15 @@
+@app.route('/view_face/<filename>')
+@login_required
+def view_face(filename):
+    """عرض صورة من مجلد الوجوه المشترك"""
+    try:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if os.path.exists(filepath):
+            with open(filepath, 'rb') as f:
+                image_data = f.read()
+            return Response(image_data, mimetype='image/jpeg')
+        else:
+            return "Image not found", 404
+    except Exception as e:
+        print(f"Error serving image: {e}")
+        return str(e), 500

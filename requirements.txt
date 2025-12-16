@@ -1,0 +1,14 @@
+opencv-python
+face_recognition
+ultralytics
+gTTS
+easyocr
+numpy
+pygame
+Flask
+Flask-SQLAlchemy
+Authlib
+deepface
+requests
+Pillow
+werkzeug
