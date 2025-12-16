@@ -174,6 +174,11 @@ class ColorDetector:
             try:
                 self.model = YOLO(self.model_path)
             except: pass
+        elif os.path.exists("color_model.pt"):
+             print(f"🎨 Custom PyTorch Color Model Found (CPU Mode)!")
+             try:
+                self.model = YOLO("color_model.pt")
+             except: pass
         
         self.colors = [
             ("Kırmızı", [0, 100, 100], [10, 255, 255]),
@@ -241,8 +246,13 @@ class SmartGlassesAssistant:
                 self.currency_model = YOLO("currency_model.hef")
                 print("   ✅ Loaded currency_model.hef")
             except: pass
+        elif os.path.exists("currency_model.pt"):
+            try:
+                self.currency_model = YOLO("currency_model.pt")
+                print("   ✅ Loaded currency_model.pt (CPU Mode)")
+            except: pass
         else:
-             print("   INFO: currency_model.hef not found. (Using SIFT)")
+             print("   INFO: currency_model.hef/pt not found. (Using SIFT)")
 
         # DeepFace (CPU)
         try: from deepface import DeepFace
